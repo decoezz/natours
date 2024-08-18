@@ -54,6 +54,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
     role: role || 'user',
   });
+
   const url = `${req.protocol}://${req.get('host')}/me`;
   await new Email(newUser, url).sendWelcome();
   createSendToken(newUser, 201, res);
@@ -224,4 +225,10 @@ exports.logout = (req, res) => {
     httpOnly: true,
   });
   res.status(200).json({ status: 'success' });
+};
+exports.getSignupForm = (req, res) => {
+  console.log('Rendering the signup form');
+  res.status(200).render('signup', {
+    title: 'Sign Up',
+  });
 };

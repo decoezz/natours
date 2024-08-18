@@ -3,6 +3,7 @@ const sharp = require('sharp');
 const User = require('../models/userModel.js');
 const catchAsync = require('../utils/catchAsync.js');
 const AppError = require('./../utils/appError.js');
+const authController = require('../controllers/authController');
 const factory = require('../controllers/handlerFactory.js');
 // const multerStorage = multer.diskStorage({
 //   destination: (req, file, cb) => {
@@ -94,6 +95,15 @@ exports.createUser = (req, res) => {
     message: 'This route is not defined! Please use /signup instead',
   });
 };
+exports.Signup = catchAsync(async (req, res, next) => {
+  const newUser = authController.signup(req, res, next);
+  if (newUser)
+    res.status(200).render('overview', {
+      title: 'Signed up successfully',
+      newUser,
+    });
+});
+
 exports.getUser = factory.getOne(User);
 exports.getAllUsers = factory.getAll(User);
 exports.updateUser = factory.updateOne(User);
