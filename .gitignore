@@ -1,3 +1,4 @@
 node_modules/
 4-natours.rar
 *.env
+.cache/

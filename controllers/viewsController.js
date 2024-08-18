@@ -15,26 +15,6 @@ exports.getOverview = catchAsync(async (req, res, next) => {
     tours,
   });
 });
-// exports.getTour = catchAsync(async (req, res, next) => {
-//   //1)get the data, for the requested tour (including reviews and guides
-//   try {
-//     const tour = await Tour.findOne({ slug: req.params.slug }).populate({
-//       path: 'reviews',
-//       fields: 'review rating user',
-//     });
-//     //2)Build template
-//     if (!tour) {
-//       return next(new AppError('There is no tour with that name', 404));
-//     }
-//     //3)Render template using data ffrom 1
-//     res.status(200).render('tour', {
-//       title: `${tour.name} tours`,
-//       tour,
-//     });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
 exports.getTour = catchAsync(async (req, res, next) => {
   try {
     const tour = await Tour.findOne({ slug: req.params.slug }).populate({
@@ -51,7 +31,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
       tour: tour, // Ensure this is correctly populated
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).send('Internal Server Error');
   }
 });

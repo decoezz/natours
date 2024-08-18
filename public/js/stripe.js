@@ -20,16 +20,14 @@ export const bookTour = async (tourID) => {
     }
 
     // 1) Get the session from the server
-    const session = await axios(
-      `http://127.0.0.1:3000/api/v1/booking/checkout-session/${tourID}`,
-    );
+    const session = await axios(`/api/v1/booking/checkout-session/${tourID}`);
 
     // 2) Redirect to Stripe Checkout
     await stripe.redirectToCheckout({
       sessionId: session.data.session.id,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     showAlert('error', 'Something went wrong, please try again!');
   }
 };

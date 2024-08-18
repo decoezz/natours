@@ -16,7 +16,7 @@ const viewRouter = require('./routes/viewRoutes.js');
 const bookingRouter = require('./routes/bookingRoutes.js');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
-
+const compression = require('compression');
 const app = express();
 app.use((req, res, next) => {
   res.locals.nonce = crypto.randomBytes(16).toString('base64'); // Generate a random nonce
@@ -24,16 +24,6 @@ app.use((req, res, next) => {
 });
 app.use((req, res, next) => {
   res.setHeader(
-    // 'Content-Security-Policy',
-    // "default-src 'self'; " +
-    //   "script-src 'self' https://api.maptiler.com https://cdn.jsdelivr.net https://js.stripe.com blob:; " +
-    //   "connect-src 'self' https://api.maptiler.com ws://127.0.0.1:*; " +
-    //   "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; " +
-    //   "img-src 'self' data: https://api.maptiler.com; " +
-    //   "font-src 'self' https://fonts.gstatic.com; " +
-    //   "frame-src 'self' https://js.stripe.com; " + // Allow Stripe in an iframe
-    //   'worker-src blob:; ' +
-    //   "object-src 'none';", // Prevent loading of plugins
     'Content-Security-Policy',
     `default-src 'self'; script-src 'self' https://api.maptiler.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://js.stripe.com blob: 'nonce-${res.locals.nonce}'; ` +
       "connect-src 'self' https://api.maptiler.com ws://127.0.0.1:*; " +
@@ -53,7 +43,6 @@ app.get('*.js.map', (req, res) => {
 //Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  // console.log(req.cookies);
   next();
 });
 
@@ -123,7 +112,7 @@ app.use(
     ],
   }),
 );
-
+app.use(compression());
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);

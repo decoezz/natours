@@ -33,7 +33,6 @@ const reviewSchema = new mongoose.Schema(
   },
 );
 reviewSchema.pre(/^find/, function (next) {
-  console.log('Populating review...');
   this.populate({
     path: 'user',
     select: 'name photo',
@@ -60,7 +59,6 @@ reviewSchema.statics.calcAverageRating = async function (tourId) {
       },
     },
   ]);
-  console.log(stats);
   if (stats.length > 0) {
     await Tour.findByIdAndUpdate(tourId, {
       ratingsQuantity: stats[0].nRating,
